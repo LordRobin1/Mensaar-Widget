@@ -1,4 +1,7 @@
-# mensa
-kde mensa lübeck plasmoid
+# mensa widget
+kde mensa saarbrücken plasmoid
 
-KDE Plasma 5 Widget für die Mensa API https://github.com/Draculente/mensa-api
+Allows you to be prepared for the horror that's awaiting you 
+
+---
+mostly stolen from [here](https://github.com/leonderdunna/mensa)

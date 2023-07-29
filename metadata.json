@@ -2,6 +2,9 @@
     "KPlugin": {
         "Authors": [
             {
+                "Name": "Robin Gebhardt"
+            },
+            {
                 "Email": "leonard.menzel@tutanota.com",
                 "Name": "Leonard Menzel"
             }
@@ -10,9 +13,9 @@
         "Description": "Zeigt den aktuellen Speiseplan der Mensa an.",
         "EnabledByDefault": true,
         "Icon": "emoji-food-symbolic",
-        "Id": "com.github.leonderdunna.mensa",
+        "Id": "com.github.Lord_Robin1.MensaSB-widget",
         "License": "GPL V3",
-        "Name": "Mensa",
+        "Name": "MensaSB",
         "FormFactors": [
             "desktop"
         ],
@@ -20,7 +23,7 @@
             "Plasma/Applet"
         ],
         "Version": "1.0.0",
-        "Website": "https://github.com/leonderdunna/mensa.git"
+        "Website": "https://github.com/Lord_Robin1/MensaSB-widget.git"
     },
     "X-Plasma-API": "declarativeappletscript",
     "X-Plasma-MainScript": "ui/main.qml",

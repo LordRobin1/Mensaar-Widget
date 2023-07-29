@@ -20,17 +20,24 @@ Item {
             id: header
             width: parent.width
             height: units.gridUnit * 2
+            Layout.alignment: Qt.AlignHCenter
+            // Layout.maximumWidth: parent.width 
+            Layout.fillWidth: true
+            Layout.margins: 20
+            Layout.bottomMargin: parent.width < 225 ? 40 : parent.width < 300 ? 20 : 5
+            Layout.topMargin: 5
 
             RowLayout {
                 anchors.fill: parent
-                spacing: units.gridUnit
                 anchors.horizontalCenter: parent.horizontalCenter
+                spacing: units.gridUnit
 
                 Controls.Button {
+                    Layout.maximumWidth: .2 * parent.width
                     text: "<"
+                    font.bold: true
                     onClicked: {
-                        if (currentTabIndex > 0)
-                        {
+                        if (currentTabIndex > 0) {
                             currentTabIndex--
                         }
                     }
@@ -38,16 +45,21 @@ Item {
                 }
 
                 Controls.Label {
+                    Layout.fillWidth: true
                     text: new Date(speiseplan[currentTabIndex].date).toLocaleDateString()
                     horizontalAlignment: Text.AlignHCenter
+                    font.bold: true
+                    font.pointSize: 12
+                    wrapMode: Text.Wrap
                 }
 
 
                 Controls.Button {
+                    Layout.maximumWidth: .2 * parent.width
                     text: ">"
+                    font.bold: true
                     onClicked: {
-                        if (currentTabIndex < speiseplan.length - 1)
-                        {
+                        if (currentTabIndex < speiseplan.length - 1) {
                             currentTabIndex++
                         }
                     }
@@ -63,11 +75,11 @@ Item {
 
 
             Kirigami.CardsListView {
-                id:meals
-                model:speiseplan[currentTabIndex].meals
+                id: meals
+                model: speiseplan[currentTabIndex].counters
 
                 delegate: Kirigami.AbstractCard {
-                    contentItem:Item {
+                    contentItem: Item {
                         implicitWidth: delegateLayout.implicitWidth
                         implicitHeight: delegateLayout.implicitHeight
                         GridLayout {
@@ -77,7 +89,7 @@ Item {
                                 left: parent.left
                                 top: parent.top
                                 right: parent.right
-                                //IMPORTANT: never put the bottom margin
+                                // IMPORTANT: never put the bottom margin
                             }
                             rowSpacing: Kirigami.Units.largeSpacing
                             columnSpacing: Kirigami.Units.largeSpacing
@@ -87,26 +99,34 @@ Item {
                                 Controls.Label {
                                     Layout.fillWidth: true
                                     text: modelData.name
-                                    wrapMode: Text.WordWrap
+                                    font.pixelSize: 14
+                                    font.bold: true 
+                                    wrapMode: Text.Wrap
                                 }
                                 Kirigami.Separator {
                                     Layout.fillWidth: true
                                 }
                                 RowLayout {
+                                    Layout.alignment: Qt.AlignLeft
                                     spacing:10
+                                    Layout.fillWidth: true
                                     Kirigami.Chip {
-                                        Layout.fillWidth: false
+                                        Layout.fillWidth: true
                                         closable:false
                                         checkable:false
-                                        text: modelData.price.split(" /")[0]
+                                        text: modelData.price
                                     }
-
                                     Kirigami.Chip {
-                                        Layout.fillWidth: false
-                                        closable:false
-                                        checkable:false
-                                        text: "Vegetarisch"
-                                        visible:modelData.vegetarian
+                                        Layout.fillWidth: true
+                                        closable: false
+                                        checkable: false
+                                        text: modelData.counter
+                                        font.bold: true
+                                        background: Rectangle {
+                                            anchors.fill: parent
+                                            radius: 2
+                                            color: Qt.rgba(modelData.color.r/255, modelData.color.g/255, modelData.color.b/255, 1)
+                                        }
                                     }
                                 }
                             }
@@ -121,26 +141,22 @@ Item {
     property var speiseplan: []
     property int currentTabIndex: 0
 
-        Plasmoid.toolTipMainText: "Speiseplan"
-        Plasmoid.toolTipSubText: "Speiseplan"
+    Plasmoid.toolTipMainText: "Speiseplan"
+    Plasmoid.toolTipSubText: "Speiseplan"
 
-        function setSpeiseplan(result)
-        {
-            speiseplan = result
-            // Set the currentTabIndex based on the current date
-            var currentDate = new Date()
-            var currentDateString = currentDate.toISOString().split('T')[0]
-            for (var i = 0; i < speiseplan.length; i++) {
-                if (speiseplan[i].date.startsWith(currentDateString))
-                {
-                    currentTabIndex = i
-                    break
-                }
+    function setSpeiseplan(result) {
+        speiseplan = result
+
+        for (var i = 0; i < speiseplan.length; i++) {
+            if (!speiseplan[i].isPast) {
+                currentTabIndex = i
+                break
             }
         }
-
-        // Initial load from SpeiseplanFetcher
-        Component.onCompleted: {
-            SpeiseplanFetcher.fetchSpeiseplan(setSpeiseplan)
-        }
     }
+
+    // Initial load from SpeiseplanFetcher
+    Component.onCompleted: {
+        SpeiseplanFetcher.fetchSpeiseplan(setSpeiseplan)
+    }
+}
