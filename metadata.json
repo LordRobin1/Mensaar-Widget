@@ -10,12 +10,12 @@
             }
         ],
         "Category": "Utilities",
-        "Description": "Zeigt den aktuellen Speiseplan der Mensa an.",
+        "Description": "Zeigt den aktuellen Speiseplan der Mensaar an.",
         "EnabledByDefault": true,
         "Icon": "emoji-food-symbolic",
-        "Id": "com.github.Lord_Robin1.MensaSB-widget",
+        "Id": "com.github.LordRobin1.Mensaar-Widget",
         "License": "GPL V3",
-        "Name": "MensaSB",
+        "Name": "Mensaar",
         "FormFactors": [
             "desktop"
         ],
@@ -23,7 +23,7 @@
             "Plasma/Applet"
         ],
         "Version": "1.0.0",
-        "Website": "https://github.com/Lord_Robin1/MensaSB-widget.git"
+        "Website": "https://github.com/LordRobin1/Mensaar-Widget.git"
     },
     "X-Plasma-API": "declarativeappletscript",
     "X-Plasma-MainScript": "ui/main.qml",

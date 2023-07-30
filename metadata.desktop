@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=MensaSB
+Name=Mensaar
 
 
-Comment=Mensa Saarbrücken Speiseplan
+Comment=Mensaar Speiseplan
 
 Icon=emoji-food-symbolic
 Type=Service
@@ -13,10 +13,10 @@ X-Plasma-MainScript=ui/main.qml
 
 X-Plasma-NotificationArea=true
 
-X-KDE-PluginInfo-Name=com.github.Lord_Robin1.MensaSB-widget
+X-KDE-PluginInfo-Name=com.github.LordRobin1.Mensaar-Widget
 X-KDE-PluginInfo-Category=Food Information
 X-KDE-PluginInfo-Author=Robin Gebhardt
 X-KDE-PluginInfo-Version=1.0.0
-X-KDE-PluginInfo-Website=https://github.com/Lord_Robin1/MensaSB-widget.git
+X-KDE-PluginInfo-Website=https://github.com/LordRobin1/Mensaar-Widget.git
 X-KDE-PluginInfo-License=GPL V3
 X-KDE-PluginInfo-EnabledByDefault=true
