@@ -12,7 +12,7 @@
         "Category": "Utilities",
         "Description": "Zeigt den aktuellen Speiseplan der Mensaar an.",
         "EnabledByDefault": true,
-        "Icon": "emoji-food-symbolic",
+        "Icon": "drink-beer",
         "Id": "com.github.LordRobin1.Mensaar-Widget",
         "License": "GPL V3",
         "Name": "Mensaar",

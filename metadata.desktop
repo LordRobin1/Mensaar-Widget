@@ -4,7 +4,7 @@ Name=Mensaar
 
 Comment=Mensaar Speiseplan
 
-Icon=emoji-food-symbolic
+Icon=drink-beer
 Type=Service
 X-KDE-ServiceTypes=Plasma/Applet
 

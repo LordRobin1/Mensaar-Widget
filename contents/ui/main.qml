@@ -145,8 +145,8 @@ Item {
     property var speiseplan: []
     property int currentTabIndex: 0
 
-    Plasmoid.toolTipMainText: "Speiseplan"
-    Plasmoid.toolTipSubText: "Speiseplan"
+    Plasmoid.toolTipMainText: "Mensaar"
+    Plasmoid.toolTipSubText: "Mensaar Speiseplan"
 
     function setSpeiseplan(result) {
         speiseplan = result
