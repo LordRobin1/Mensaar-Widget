@@ -12,6 +12,10 @@ Item {
     width: units.gridUnit * 20
     height: units.gridUnit * 10
 
+    readonly property int mensaIndex: Plasmoid.configuration.mensaOption
+    onMensaIndexChanged: SpeiseplanFetcher.fetchSpeiseplan(setSpeiseplan, mensaIndex)
+
+
     ColumnLayout {
         anchors.fill: parent
 
@@ -72,7 +76,7 @@ Item {
             id: scrollArea
             Layout.fillWidth: true
             Layout.fillHeight: true
-
+            // ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
             Kirigami.CardsListView {
                 id: meals
@@ -157,6 +161,6 @@ Item {
 
     // Initial load from SpeiseplanFetcher
     Component.onCompleted: {
-        SpeiseplanFetcher.fetchSpeiseplan(setSpeiseplan)
+        SpeiseplanFetcher.fetchSpeiseplan(setSpeiseplan, mensaIndex)
     }
 }

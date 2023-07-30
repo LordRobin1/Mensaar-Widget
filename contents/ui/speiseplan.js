@@ -1,9 +1,12 @@
 /**
  * Funktion, die den Speiseplan der Mensa Lübeck abruft
  * @param {Function} setSpeiseplan Die Funktion, an die der Speiseplan übergeben wird
+ * @param {Number} mensa Der Index der Mensa (kann unter "General" bearbeitet werden)
  */
-function fetchSpeiseplan(setSpeiseplan) {
+function fetchSpeiseplan(setSpeiseplan, mensa) {
+    const mensen = ["sb", "mensagarten", "b4r1sta", "hom", "htwgtb", "htwcas", "htwcrb", "musiksb"]
     var xhr = new XMLHttpRequest();
+    console.log(mensen[mensa])
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -13,12 +16,11 @@ function fetchSpeiseplan(setSpeiseplan) {
                 const formated = format(result)
                 setSpeiseplan(formated);
             } else {
-                console.error("Fehler beim Abrufen des Speiseplans. Statuscode: " + xhr.status);
+                console.error(`Fehler beim Abrufen des Speiseplans für ${mensen[mensa]}. Statuscode: ${xhr.status}`);
             }
         }
     };
-
-    xhr.open("GET", "https://mensaar.de/api/2/TFtD8CTykAXXwrW4WBU4/1/de/getMenu/sb");
+    xhr.open("GET", `https://mensaar.de/api/2/TFtD8CTykAXXwrW4WBU4/1/de/getMenu/${mensen[mensa]}`);
     xhr.send();
 }  
 function format(result) {
