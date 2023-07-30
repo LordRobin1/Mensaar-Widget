@@ -1,5 +1,5 @@
-# mensa widget
-kde mensa saarbrücken plasmoid
+# mensaar widget
+kde mensaar plasmoid
 
 Allows you to be prepared for the horror that's awaiting you 
 #
