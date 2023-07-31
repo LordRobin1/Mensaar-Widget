@@ -12,13 +12,63 @@ Item {
     width: units.gridUnit * 20
     height: units.gridUnit * 10
 
-    readonly property int mensaIndex: Plasmoid.configuration.mensaOption
+    readonly property int mensaIndex: mensaOption.currentIndex
     onMensaIndexChanged: SpeiseplanFetcher.fetchSpeiseplan(setSpeiseplan, mensaIndex)
-
+    readonly property bool useColor: Plasmoid.configuration.useColor
 
     ColumnLayout {
         anchors.fill: parent
 
+        Item {
+            id: config
+            width: parent.width
+            height: units.gridUnit * 2
+            Layout.fillWidth: true
+            Layout.margins: 20
+            Layout.bottomMargin: 5
+            Layout.topMargin: 5
+
+            RowLayout {
+                anchors.fill: parent
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: units.gridUnit
+
+                Controls.ComboBox {
+                    Layout.fillWidth: true
+                    id: mensaOption
+                    editable: true
+                    currentIndex: 0
+
+                    model: ListModel {
+                        id: model
+                        ListElement { text: "Saarbrücken"}
+                        ListElement { text: "Mensagarten"}
+                        ListElement { text: "Café B4.ar1sta"}
+                        ListElement { text: "Homburg"}
+                        ListElement { text: "HTW Göttelborn"}
+                        ListElement { text: "HTW Saar CAS"}
+                        ListElement { text: "HTW Saar CRB"}
+                        ListElement { text: "Cafeteria Musik Saar"}
+                    }
+
+                    onAccepted: {
+                        if (find(editText) === -1) {
+                            model.append({text: editText})
+                        }
+                    }
+                }
+                PlasmaComponents.ToolButton {
+                    Kirigami.Theme.colorSet: Kirigami.Theme.Button
+                    Kirigami.Theme.inherit: false
+                    Layout.fillWidth: true
+                    iconSource: "refreshstructure"
+                    enabled: true
+                    onClicked: {
+                        SpeiseplanFetcher.fetchSpeiseplan(setSpeiseplan, mensaIndex)
+                    }
+                }
+            }
+        }
 
         Item {
             id: header
@@ -119,6 +169,13 @@ Item {
                                         closable:false
                                         checkable:false
                                         text: modelData.price
+                                        Kirigami.Theme.colorSet: Kirigami.Theme.Button
+                                        Kirigami.Theme.inherit: false
+                                        background: Rectangle {
+                                            anchors.fill: parent
+                                            radius: 2
+                                            color: Kirigami.Theme.backgroundColor
+                                        }
                                     }
                                     Kirigami.Chip {
                                         Layout.fillWidth: true
@@ -126,10 +183,14 @@ Item {
                                         checkable: false
                                         text: modelData.counter
                                         font.bold: true
+                                        Kirigami.Theme.colorSet: Kirigami.Theme.Button
+                                        Kirigami.Theme.inherit: false
                                         background: Rectangle {
                                             anchors.fill: parent
                                             radius: 2
-                                            color: Qt.rgba(modelData.color.r/255, modelData.color.g/255, modelData.color.b/255, 1)
+                                            color: useColor 
+                                                    ? Qt.rgba(modelData.color.r/255, modelData.color.g/255, modelData.color.b/255, 1) 
+                                                    : Kirigami.Theme.backgroundColor
                                         }
                                     }
                                 }

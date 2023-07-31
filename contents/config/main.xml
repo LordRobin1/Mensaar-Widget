@@ -6,22 +6,9 @@
   <kcfgfile name=""/>
 
   <group name="General">
-
-    <entry name="mensaOption" type="enum">
-      <label>Mensa deren Speiseplan angezeigt werden soll.</label>
-      <choices>
-            <choice name="Saarbrücken"/>
-            <choice name="Mensagarten"/>
-            <choice name="Café B4.ar1sta"/>
-            <choice name="Homburg"/>
-            <choice name="HTW Göttelborn"/>
-            <choice name="HTW Saar CAS"/>
-            <choice name="HTW Saar CRB"/>
-            <choice name="Cafeteria Musik Saar"/>
-      </choices>
-      <default>0</default>
+    <entry name="useColor" type="Bool">
+      <default>true</default>
     </entry>
-
   </group>
   
 </kcfg>
