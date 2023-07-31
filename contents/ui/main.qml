@@ -5,7 +5,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.plasmoid 2.0
 import org.kde.kirigami 2.20 as Kirigami
 import org.kde.plasma.components 2.0 as PlasmaComponents
-import "speiseplan.js" as SpeiseplanFetcher
+import "speiseplan.js" as MensaarFetcher
 
 Item {
     id: root
@@ -13,8 +13,11 @@ Item {
     height: units.gridUnit * 10
 
     readonly property int mensaIndex: mensaOption.currentIndex
-    onMensaIndexChanged: SpeiseplanFetcher.fetchSpeiseplan(setSpeiseplan, mensaIndex)
+    onMensaIndexChanged: MensaarFetcher.fetchSpeiseplan(setSpeiseplan, mensaIndex)
     readonly property bool useColor: Plasmoid.configuration.useColor
+    readonly property bool showComponents: Plasmoid.configuration.showComponents
+    readonly property bool showLocationTip: Plasmoid.configuration.showLocationTip
+    readonly property bool showPriceTip: Plasmoid.configuration.showPriceTip
 
     ColumnLayout {
         anchors.fill: parent
@@ -36,35 +39,37 @@ Item {
                 Controls.ComboBox {
                     Layout.fillWidth: true
                     id: mensaOption
-                    editable: true
                     currentIndex: 0
 
                     model: ListModel {
                         id: model
-                        ListElement { text: "Saarbrücken"}
-                        ListElement { text: "Mensagarten"}
-                        ListElement { text: "Café B4.ar1sta"}
-                        ListElement { text: "Homburg"}
-                        ListElement { text: "HTW Göttelborn"}
-                        ListElement { text: "HTW Saar CAS"}
-                        ListElement { text: "HTW Saar CRB"}
-                        ListElement { text: "Cafeteria Musik Saar"}
+                        ListElement { text: "Saarbrücken" }
+                        ListElement { text: "Mensagarten" }
+                        ListElement { text: "Café B4.ar1sta" }
+                        ListElement { text: "Homburg" }
+                        ListElement { text: "HTW Göttelborn" }
+                        ListElement { text: "HTW Saar CAS" }
+                        ListElement { text: "HTW Saar CRB" }
+                        ListElement { text: "Cafeteria Musik Saar" }
                     }
 
-                    onAccepted: {
-                        if (find(editText) === -1) {
-                            model.append({text: editText})
-                        }
+                    PlasmaCore.ToolTipArea {
+                        visible: showLocationTip
+                        anchors.fill: parent
+                        mainText: baseData.locations[mensen[mensaIndex]].displayName
+                        subText: baseData.locations[mensen[mensaIndex]].description
                     }
                 }
                 PlasmaComponents.ToolButton {
+                    Layout.minimumHeight: 20
                     Kirigami.Theme.colorSet: Kirigami.Theme.Button
                     Kirigami.Theme.inherit: false
                     Layout.fillWidth: true
                     iconSource: "refreshstructure"
                     enabled: true
                     onClicked: {
-                        SpeiseplanFetcher.fetchSpeiseplan(setSpeiseplan, mensaIndex)
+                        MensaarFetcher.fetchSpeiseplan(setSpeiseplan, mensaIndex);
+                        MensaarFetcher.fetchBaseData(setBaseData);
                     }
                 }
             }
@@ -75,7 +80,6 @@ Item {
             width: parent.width
             height: units.gridUnit * 2
             Layout.alignment: Qt.AlignHCenter
-            // Layout.maximumWidth: parent.width 
             Layout.fillWidth: true
             Layout.margins: 20
             Layout.bottomMargin: parent.width < 225 ? 40 : parent.width < 300 ? 20 : 5
@@ -126,7 +130,6 @@ Item {
             id: scrollArea
             Layout.fillWidth: true
             Layout.fillHeight: true
-            // ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
             Kirigami.CardsListView {
                 id: meals
@@ -157,18 +160,57 @@ Item {
                                     font.bold: true 
                                     wrapMode: Text.Wrap
                                 }
+                                
+                                Column {
+                                    visible: showComponents && modelData.components.length > 0
+                                    // Layout.fillWidth: true
+                                    // Layout.alignment: Qt.AlignLeft
+                                    Repeater {
+                                        id: components
+                                        model: modelData.components
+                                        RowLayout {
+                                            Layout.alignment: Qt.AlignLeft
+                                            spacing:5
+                                            Layout.fillWidth: true
+                                            Text {
+                                                Layout.fillWidth: true
+                                                text: "• "
+                                                color: Kirigami.Theme.textColor
+                                                wrapMode: Text.Wrap
+                                            }
+                                            Controls.Label {
+                                                Layout.fillWidth: true
+                                                text: modelData.name
+                                                wrapMode: Text.Wrap
+                                            }
+                                        }
+                                    }
+                                }
+
                                 Kirigami.Separator {
                                     Layout.fillWidth: true
                                 }
+
                                 RowLayout {
                                     Layout.alignment: Qt.AlignLeft
                                     spacing:10
                                     Layout.fillWidth: true
+
                                     Kirigami.Chip {
                                         Layout.fillWidth: true
                                         closable:false
                                         checkable:false
-                                        text: modelData.price
+                                        text: modelData.prices != undefined ? `${modelData.prices.s}€` : "N/A"
+
+                                        PlasmaCore.ToolTipArea {
+                                            visible: showPriceTip
+                                            anchors.fill: parent
+                                            mainText: "Preise"
+                                            subText: `Studenten: ${modelData.prices != undefined ? `${modelData.prices.s}€` : "N/A"}`
+                                                        +`\nBedienstete: ${modelData.prices != undefined ? `${modelData.prices.m}€` : "N/A"}`
+                                                        +`\nGäste: ${modelData.prices != undefined ? `${modelData.prices.g}€` : "N/A"}`
+                                        }
+
                                         Kirigami.Theme.colorSet: Kirigami.Theme.Button
                                         Kirigami.Theme.inherit: false
                                         background: Rectangle {
@@ -177,6 +219,7 @@ Item {
                                             color: Kirigami.Theme.backgroundColor
                                         }
                                     }
+
                                     Kirigami.Chip {
                                         Layout.fillWidth: true
                                         closable: false
@@ -203,25 +246,31 @@ Item {
             }
         }
     }
+    property var mensen: ["sb", "mensagarten", "b4r1sta", "hom", "htwgtb", "htwcas", "htwcrb", "musiksb"] 
     property var speiseplan: []
+    property var baseData: {}
     property int currentTabIndex: 0
 
     Plasmoid.toolTipMainText: "Mensaar"
     Plasmoid.toolTipSubText: "Mensaar Speiseplan"
 
     function setSpeiseplan(result) {
-        speiseplan = result
+        speiseplan = result;
 
         for (var i = 0; i < speiseplan.length; i++) {
             if (!speiseplan[i].isPast) {
-                currentTabIndex = i
-                break
+                currentTabIndex = i;
+                break;
             }
         }
     }
+    function setBaseData(result) {
+        baseData = result;
+    }
 
-    // Initial load from SpeiseplanFetcher
+    // Initial load from MensaarFetcher
     Component.onCompleted: {
-        SpeiseplanFetcher.fetchSpeiseplan(setSpeiseplan, mensaIndex)
+        MensaarFetcher.fetchSpeiseplan(setSpeiseplan, mensaIndex);
+        MensaarFetcher.fetchBaseData(setBaseData)
     }
 }

@@ -6,9 +6,23 @@
   <kcfgfile name=""/>
 
   <group name="General">
+
     <entry name="useColor" type="Bool">
       <default>true</default>
     </entry>
+
+    <entry name="showComponents" type="Bool">
+      <default>true</default>
+    </entry>
+
+    <entry name="showLocationTip" type="Bool">
+      <default>true</default>
+    </entry>
+
+    <entry name="showPriceTip" type="Bool">
+      <default>true</default>
+    </entry>
+
   </group>
   
 </kcfg>

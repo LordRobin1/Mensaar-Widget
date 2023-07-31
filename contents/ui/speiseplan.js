@@ -6,9 +6,8 @@
 function fetchSpeiseplan(setSpeiseplan, mensa) {
     const mensen = ["sb", "mensagarten", "b4r1sta", "hom", "htwgtb", "htwcas", "htwcrb", "musiksb"]
     var xhr = new XMLHttpRequest();
-    console.log(mensen[mensa])
 
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 const responseText = xhr.responseText;
@@ -30,11 +29,10 @@ function format(result) {
         for (let counter of day.counters) {
 
             for (let meal of counter.meals) {
-                let color = (counter.color.r << 16) + (counter.color.g << 8) + counter.color.b;
                 meals.push({ 
                     name: meal.name,
                     components: meal.components,
-                    price: meal.prices != null ? meal.prices.s + "€" : "N/A",
+                    prices: meal.prices,
                     counter: counter.displayName, 
                     color: counter.color,
                 })
@@ -43,4 +41,25 @@ function format(result) {
         day.counters = meals;
     }
     return result.days
+}
+
+/**
+ * @param {Function} setBaseData Die Funktion, an die die Basisdaten übergeben werden
+*/
+function fetchBaseData(setBaseData) {
+    let xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                const responseText = xhr.responseText;
+                const result = JSON.parse(responseText);
+                setBaseData({locations: result.locations, priceTiers: result.priceTiers});
+            } else {
+                console.error(`Fehler beim Abrufen der Basisdaten. Statuscode: ${xhr.status}`);
+            }
+        }
+    };
+    xhr.open("GET", `https://mensaar.de/api/2/TFtD8CTykAXXwrW4WBU4/1/de/getBaseData`)
+    xhr.send();
 }
