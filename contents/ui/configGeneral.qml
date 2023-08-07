@@ -12,7 +12,7 @@ Kirigami.FormLayout {
 
     Controls.CheckBox {
         id: useColor
-        text: "Use color"
+        text: "Farben anzeigen"
         checked: true
     }
     Controls.CheckBox {

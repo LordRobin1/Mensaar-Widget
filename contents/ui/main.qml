@@ -169,6 +169,7 @@ Item {
                                         id: components
                                         model: modelData.components
                                         RowLayout {
+                                            visible: modelData.name != ""
                                             Layout.alignment: Qt.AlignLeft
                                             spacing:5
                                             Layout.fillWidth: true
