@@ -236,6 +236,11 @@ Item {
                                                     ? Qt.rgba(modelData.color.r/255, modelData.color.g/255, modelData.color.b/255, 1) 
                                                     : Kirigami.Theme.backgroundColor
                                         }
+                                        PlasmaCore.ToolTipArea {
+                                            visible: showPriceTip
+                                            anchors.fill: parent
+                                            mainText: modelData.counter_desc
+                                        }
                                     }
                                 }
                             }

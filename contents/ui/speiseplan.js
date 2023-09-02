@@ -34,6 +34,7 @@ function format(result) {
                     components: meal.components,
                     prices: meal.prices,
                     counter: counter.displayName, 
+                    counter_desc: counter.description,
                     color: counter.color,
                 })
             }
